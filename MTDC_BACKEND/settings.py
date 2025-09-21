@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 # Allow your Angular frontend to call Django
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
+    "http://localhost:4200","https://mtp-backend-ytry.onrender.com"
 ]
 
 # Optional: allow credentials like cookies
@@ -135,6 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
