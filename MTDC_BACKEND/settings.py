@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+import dj_database_url
+from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -83,20 +85,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'MTDC_BACKEND.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+ # Production DB (PostgreSQL)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',   # MySQL backend
-        'NAME': 'mtdc_db',           # Database name
-        'USER': 'root',                # MySQL username
-        'PASSWORD': 'Prajwal@1234',            # MySQL password
-        'HOST': 'localhost',                    # Or IP address of DB server
-        'PORT': '3306',                         # Default MySQL port
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
 
 
@@ -141,3 +134,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
