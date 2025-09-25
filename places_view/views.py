@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
-
+from rest_framework.decorators import api_view
 
 @csrf_exempt
 def register(request):
@@ -127,3 +127,33 @@ def update_profile(request, user_id):
             'mobile_number': user.mobile_number
         }
     }, status=200)
+
+@csrf_exempt
+@api_view(['POST'])
+def show_places(request):
+    
+    user_id=request.data.get('user_id')
+    print(user_id)
+    if not user_id:
+        return JsonResponse({'error': 'user_id parameter is required'}, status=400)
+    try:
+        user = User.objects.get(id=user_id) 
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User does not exist'}, status=404)
+    places = Places.objects.all()
+    
+    places_list = []
+    for place in places:
+        places_list.append({
+            'id': place.id,
+            'user_id': place.user.id,
+            'name': place.name,
+            'description': place.description,
+            'location': place.location,
+            'image_url_1': place.image_url_1,
+            'image_url_2': place.image_url_2,
+            'image_url_3': place.image_url_3,
+            'created_at': place.created_at,
+            'updated_at': place.updated_at
+        })
+    return JsonResponse({'places': places_list}, status=200)
