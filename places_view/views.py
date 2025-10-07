@@ -127,22 +127,24 @@ def update_profile(request, user_id):
             'mobile_number': user.mobile_number
         }
     }, status=200)
-
+    
 @csrf_exempt
 @api_view(['POST'])
 def show_places(request):
-    
-    user_id=request.data.get('user_id')
-    print(user_id)
+    user_id = request.data.get('user_id')
+    print("Received user_id:", user_id)
+
     if not user_id:
         return JsonResponse({'error': 'user_id parameter is required'}, status=400)
+
     try:
-        user = User.objects.get(id=user_id) 
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'error': 'User does not exist'}, status=404)
+
     places = Places.objects.all()
-    
     places_list = []
+
     for place in places:
         places_list.append({
             'id': place.id,
@@ -156,4 +158,9 @@ def show_places(request):
             'created_at': place.created_at,
             'updated_at': place.updated_at
         })
+
+    # If you just wanted to test a sample key
+   
+
     return JsonResponse({'places': places_list}, status=200)
+
